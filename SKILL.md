@@ -228,4 +228,9 @@ Then STOP. Do not run additional checks.
 - **Single-session**: invoke once per agent to watch. Multi-agent watching would need one invocation per target.
 - **One-shot nudge only**: after the first nudge fires (success or failure), the watcher disarms. If the agent ignores the nudge and stays stuck, no further intervention. See `docs/open-questions.md` for the backoff-vs-one-shot design tension.
 - **No 5h-reset awareness**: doesn't read `resets_at` from `account.json` to anticipate when the window will clear. Ticks at fixed intervals regardless.
-- **Requires cache-fix telemetry**: the per-session activity signal comes from `~/.claude/quota-status/sessions/<sid>.json`, which is written by the [cache-fix proxy](https://github.com/cnighswonger/claude-code-cache-fix) extension `cache-telemetry`. Without cache-fix, the fallback path reads `~/.claude/quota-status.json` (single-session legacy) — usable for the invoking session but not for sibling sessions.
+- **Requires [cache-fix proxy](https://github.com/cnighswonger/claude-code-cache-fix)** — hard dependency, not optional. All three condition evaluations read files that cache-fix writes:
+  - `~/.claude/quota-status/account.json` (v3.5.0+) — account-level status.
+  - `~/.claude/quota-status/sessions/<sid>.json` (v3.5.0+) — per-session activity timestamp.
+  - `~/.claude/quota-status.json` (v3.4.x / preload mode) — legacy single-file fallback, invoking session only.
+
+  Without cache-fix running, none of these files exist and the skill has no source for the conditions it evaluates. Install cache-fix first.

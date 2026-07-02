@@ -43,7 +43,12 @@ Restart Claude Code after installing to pick up the new skill.
 ## Requirements
 
 - **Claude Code** — this is a Claude Code skill.
-- **cache-fix proxy (recommended)** — the per-session activity signal comes from `~/.claude/quota-status/sessions/<sid>.json`, written by [claude-code-cache-fix](https://github.com/cnighswonger/claude-code-cache-fix) v3.5.0+. Without it, the fallback path reads `~/.claude/quota-status.json` (single-session legacy), which is usable for the current session but not for sibling sessions.
+- **[claude-code-cache-fix](https://github.com/cnighswonger/claude-code-cache-fix) proxy — required.** All three of `/babysit`'s condition evaluations read files that only cache-fix writes:
+  - `~/.claude/quota-status/account.json` — for account-level rate-limit status. Requires cache-fix v3.5.0+.
+  - `~/.claude/quota-status/sessions/<sid>.json` — for per-session activity timestamp. Requires cache-fix v3.5.0+.
+  - `~/.claude/quota-status.json` — legacy single-file layout, used as a fallback for cache-fix v3.4.x / preload mode. Works for the invoking session only, not sibling sessions.
+
+  Without cache-fix running, none of these files exist and the skill has no source for the conditions it evaluates. Install cache-fix first; the skill won't be useful without it.
 
 ## Usage
 
