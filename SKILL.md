@@ -1,7 +1,7 @@
 ---
 name: babysit
 description: Watch an idle Claude Code session for a rate-limit recovery moment and nudge it to resume when the window clears. Use when leaving an agent running unattended overnight or during meetings.
-version: 0.2.0
+version: 0.2.1
 ---
 
 # /babysit — Rate-limit recovery watcher
